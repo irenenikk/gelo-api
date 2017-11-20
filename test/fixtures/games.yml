@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  result: 1
+  white: 1
+  black: 1
+
+two:
+  result: 1
+  white: 1
+  black: 1
