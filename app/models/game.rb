@@ -4,9 +4,34 @@ class Game < ApplicationRecord
     before_save :update_ratings
 
     belongs_to :white, class_name: 'Player', foreign_key: 'white'
-    belongs_to :black, class_name: 'Player', foreign_key: 'black'    
+    belongs_to :black, class_name: 'Player', foreign_key: 'black' 
+    
+    validate :validate_unique_players
+
+    def self.new_from_result(game_params, current_user)
+        opponent = Player.find_by_username game_params["opponent"]
+        g = Game.new
+        if game_params["side"] == "white"
+            g.white = current_user 
+            g.black = opponent
+        else
+            g.white = opponent
+            g.black = current_user
+        end
+        g.result = 1 
+        if game_params["whoWon"] == "black"
+            g.result = -1
+        elsif  game_params["whoWon"] == "draw"
+            g.result = 0
+        end
+        g
+    end
 
     private
+
+        def validate_unique_players
+            errors.add(:white, "Players must be different") if self.white == self.black
+        end
 
         def update_ratings
             rating1, rating2 = calculate_rating(self.white, self.black, self.result)
@@ -16,8 +41,6 @@ class Game < ApplicationRecord
                 deviation: rating1.rating_deviation,
                 volatility: rating1.volatility
             )
-
-            p1.save
             
             p2 = self.black
             p2.update_attributes(
@@ -25,9 +48,6 @@ class Game < ApplicationRecord
                 deviation: rating2.rating_deviation,
                 volatility: rating2.volatility
             )
-
-            self.black.save
-            
         end
 
         def calculate_rating(player1, player2, winner)
