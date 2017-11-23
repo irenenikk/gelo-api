@@ -5,5 +5,5 @@ Rails.application.routes.draw do
   post '/users' => 'players#create'
   post '/login' =>  'players#login'
   get '/notifications' => 'games#notifications'
-  post '/games/:id/confirm' => 'games#confirm'  
+  post '/games/:id/confirm' => 'games#confirm'
 end
