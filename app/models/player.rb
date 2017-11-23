@@ -1,8 +1,8 @@
 class Player < ApplicationRecord
     has_secure_password
 
-    after_create_commit :generate_token
-    after_create_commit :initial_ratings
+    before_create :generate_token
+    before_create :initial_ratings
 
     validates :username, uniqueness: true
 
