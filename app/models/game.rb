@@ -9,6 +9,10 @@ class Game < ApplicationRecord
 
     validate :validate_unique_players
 
+    def has_player?(u)
+        self.white == u or self.black == u
+    end
+
     def self.new_from_result(game_params, current_user)
         opponent = Player.find_by_username game_params["opponent"]
         g = Game.new
