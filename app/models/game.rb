@@ -5,12 +5,14 @@ class Game < ApplicationRecord
 
     belongs_to :white, class_name: 'Player', foreign_key: 'white'
     belongs_to :black, class_name: 'Player', foreign_key: 'black' 
-    
+    belongs_to :added_by, class_name: 'Player', foreign_key: 'added_by'
+
     validate :validate_unique_players
 
     def self.new_from_result(game_params, current_user)
         opponent = Player.find_by_username game_params["opponent"]
         g = Game.new
+        g.added_by = current_user
         if game_params["side"] == "white"
             g.white = current_user 
             g.black = opponent

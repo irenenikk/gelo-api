@@ -14,10 +14,17 @@ class GamesController < ApplicationController
     render json: @game
   end
 
+  # GET /notifications
+  def notifications
+    games = current_user.unconfirmed_games
+
+    render json: games, status: 200
+  end
+
   # POST /games
   def create
     @game = Game.new_from_result(game_params, current_user)
-        
+
     if @game.save
       render json: @game, status: :created, location: @game
     else
