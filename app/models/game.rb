@@ -9,6 +9,7 @@ class Game < ApplicationRecord
 
     validate :validate_unique_players
     validates :black, presence: true
+    validates :white, presence: true
 
     def has_player?(u)
         self.white == u or self.black == u
